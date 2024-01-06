@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.project.tjvclient.api_client;
 
+import cz.cvut.fit.tjv.project.tjvclient.model.StudentDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -28,6 +30,7 @@ public class TeacherClient {
                 .build();
     }
 
+    //CRUD: Update
     public void updateCurrentTeacher(TeacherDto data) {
         currentTeacherRestClient
                 .put()
@@ -36,17 +39,54 @@ public class TeacherClient {
                 .toBodilessEntity();
     }
 
+    //CRUD: Read all teachers
+    /*
     public Collection<TeacherDto> readAll() {
         return Arrays.asList(teacherRestClient.get()
                 .retrieve()
                 .toEntity(TeacherDto[].class)
                 .getBody());
     }
+     */
 
+    //CRUD: Read by id
+    public TeacherDto read(Integer teacherId) {
+        this.setCurrentTeacher(teacherId);
+        return currentTeacherRestClient.get()
+                .retrieve()
+                .toEntity(TeacherDto.class)
+                .getBody();
+    }
+
+    //CRUD: Create
     public void create(TeacherDto data) {
         teacherRestClient.post()
                 .body(data)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    //CRUD: Delete
+    public void delete(Integer teacherId) {
+        this.setCurrentTeacher(teacherId);
+        currentTeacherRestClient.delete()
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public List<TeacherDto> readByDepartment(String department) {
+        return Arrays.asList(teacherRestClient.get()
+                .uri("/" + department + "/readByDepartment")
+                .retrieve()
+                .toEntity(TeacherDto[].class)
+                .getBody());
+    }
+
+    public List<StudentDto> obtainStudentsTaughtByTeacher(int teacherId) {
+        return Arrays.asList(teacherRestClient.get()
+                .uri("/" + teacherId + "/obtainStudentsTaughtByTeacher")
+                .retrieve()
+                .toEntity(StudentDto[].class)
+                .getBody());
     }
 }

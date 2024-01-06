@@ -16,9 +16,13 @@ public class StudentService {
         this.studentClient = studentClient;
     }
 
+    /*
     public Collection<StudentDto> readAll() {
         return studentClient.readAll();
     }
+     */
+
+    //CRUD: Read by id
 
     public void create(StudentDto data) {
         studentClient.create(data);

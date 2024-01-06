@@ -5,6 +5,8 @@ import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+
 @Service
 public class TeacherService {
     private TeacherClient teacherClient;
@@ -14,10 +16,19 @@ public class TeacherService {
         this.teacherClient = teacherClient;
     }
 
+    //CRUD: Read all teachers
+    /*
     public Collection<TeacherDto> readAll() {
         return teacherClient.readAll();
     }
+     */
 
+    //CRUD: Read by id
+    public TeacherDto read() {
+        return teacherClient.read(currentTeacherId);
+    }
+
+    //CRUD: Create
     public void create(TeacherDto data) {
         teacherClient.create(data);
     }
@@ -31,11 +42,20 @@ public class TeacherService {
         return currentTeacherId != null;
     }
 
-    public void updateCurrentTeacher(TeacherDto data) {
-        if (isCurrentTeacherSet()) {
-            teacherClient.updateCurrentTeacher(data);
-        } else {
-            // Handle the case when no current teacher is set
-        }
+    //CRUD: Update
+    public void updateCurrentTeacher(String name, String department, List<String> courseNames) {
+        var u = new TeacherDto();
+        u.setId(currentTeacherId);
+        u.setName(name);
+        u.setDepartment(department);
+        u.setCourseNames(courseNames);
+        teacherClient.updateCurrentTeacher(u);
     }
+
+    //CRUD: Delete
+    public void deleteCurrentTeacher() {
+        teacherClient.delete(currentTeacherId);
+    }
+
+
 }

@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -48,6 +49,22 @@ public class StudentClient {
                 .body(data)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    public List<StudentDto> readByCoursesId(int courseId) {
+        return Arrays.asList(studentRestClient.get()
+                .uri("/" + courseId + "/getStudentsByCourseId")
+                .retrieve()
+                .toEntity(StudentDto[].class)
+                .getBody());
+    }
+
+    public Integer obtainTotalEnrolledCredits(int studentId) {
+        return studentRestClient.get()
+                .uri("/" + studentId + "/obtainTotalEnrolledCredits")
+                .retrieve()
+                .toEntity(Integer.class)
+                .getBody();
     }
 }
 
