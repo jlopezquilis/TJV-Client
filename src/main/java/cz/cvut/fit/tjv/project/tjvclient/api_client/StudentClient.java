@@ -1,6 +1,7 @@
 package cz.cvut.fit.tjv.project.tjvclient.api_client;
 
 import cz.cvut.fit.tjv.project.tjvclient.model.StudentDto;
+import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -29,6 +30,7 @@ public class StudentClient {
                 .build();
     }
 
+    //CRUD: Update
     public void updateCurrentStudent(StudentDto data) {
         currentStudentRestClient
                 .put()
@@ -37,16 +39,37 @@ public class StudentClient {
                 .toBodilessEntity();
     }
 
+    //CRUD: Read all students
+    /*
     public Collection<StudentDto> readAll() {
         return Arrays.asList(studentRestClient.get()
                 .retrieve()
                 .toEntity(StudentDto[].class)
                 .getBody());
     }
+     */
 
+    //CRUD: Read by id
+    public StudentDto read(Integer studentId) {
+        this.setCurrentStudent(studentId);
+        return currentStudentRestClient.get()
+                .retrieve()
+                .toEntity(StudentDto.class)
+                .getBody();
+    }
+
+    //CRUD: Create
     public void create(StudentDto data) {
         studentRestClient.post()
                 .body(data)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    //CRUD: Delete
+    public void delete(Integer studentID) {
+        this.setCurrentStudent(studentID);
+        currentStudentRestClient.delete()
                 .retrieve()
                 .toBodilessEntity();
     }

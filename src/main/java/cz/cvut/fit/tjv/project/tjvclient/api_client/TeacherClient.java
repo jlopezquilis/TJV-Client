@@ -74,9 +74,9 @@ public class TeacherClient {
                 .toBodilessEntity();
     }
 
-    public List<TeacherDto> readByDepartment(String department) {
+    public List<TeacherDto> readByDepartment(String departmentId) {
         return Arrays.asList(teacherRestClient.get()
-                .uri("/" + department + "/readByDepartment")
+                .uri("/" + departmentId + "/readByDepartment")
                 .retrieve()
                 .toEntity(TeacherDto[].class)
                 .getBody());
