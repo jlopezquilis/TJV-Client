@@ -2,6 +2,7 @@ package cz.cvut.fit.tjv.project.tjvclient.service;
 
 
 import cz.cvut.fit.tjv.project.tjvclient.api_client.StudentClient;
+import cz.cvut.fit.tjv.project.tjvclient.model.CourseDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.StudentDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import org.springframework.stereotype.Service;
@@ -45,12 +46,12 @@ public class StudentService {
     }
 
     //CRUD: Update
-    public void updateCurrentStudent(String name, Integer age, List<String> courseNames) {
+    public void updateCurrentStudent(String name, Integer age, Collection<CourseDto> courses) {
         var u = new StudentDto();
         u.setId(currentStudentId);
         u.setName(name);
         u.setAge(age);
-        u.setCourseNames(courseNames);
+        u.setCourses(courses);
         studentClient.updateCurrentStudent(u);
     }
 
@@ -59,7 +60,7 @@ public class StudentService {
         studentClient.delete(currentStudentId);
     }
 
-    public List<StudentDto> readByCoursesId(int courseId) {
+    public Collection<StudentDto> readByCoursesId(int courseId) {
         return studentClient.readByCoursesId(courseId);
     }
 

@@ -74,7 +74,7 @@ public class TeacherClient {
                 .toBodilessEntity();
     }
 
-    public List<TeacherDto> readByDepartment(String departmentId) {
+    public Collection<TeacherDto> readByDepartment(String departmentId) {
         return Arrays.asList(teacherRestClient.get()
                 .uri("/" + departmentId + "/readByDepartment")
                 .retrieve()
@@ -82,7 +82,7 @@ public class TeacherClient {
                 .getBody());
     }
 
-    public List<StudentDto> obtainStudentsTaughtByTeacher(int teacherId) {
+    public Collection<StudentDto> obtainStudentsTaughtByTeacher(int teacherId) {
         return Arrays.asList(teacherRestClient.get()
                 .uri("/" + teacherId + "/obtainStudentsTaughtByTeacher")
                 .retrieve()

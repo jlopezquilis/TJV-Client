@@ -70,7 +70,7 @@ public class CourseClient {
                 .toBodilessEntity();
     }
 
-    public List<CourseDto> readByStudentsId(int studentId) {
+    public Collection<CourseDto> readByStudentsId(int studentId) {
         return Arrays.asList(courseRestClient.get()
                 .uri("/" + studentId + "/readByStudentsId")
                 .retrieve()
@@ -78,7 +78,7 @@ public class CourseClient {
                 .getBody());
     }
 
-    public List<CourseDto> readByCredits(int credits) {
+    public Collection<CourseDto> readByCredits(int credits) {
         return Arrays.asList(courseRestClient.get()
                 .uri("/" + credits + "/readByCredits")
                 .retrieve()

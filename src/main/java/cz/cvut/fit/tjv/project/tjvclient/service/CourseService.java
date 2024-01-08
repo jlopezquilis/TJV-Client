@@ -3,6 +3,7 @@ package cz.cvut.fit.tjv.project.tjvclient.service;
 import cz.cvut.fit.tjv.project.tjvclient.api_client.CourseClient;
 import cz.cvut.fit.tjv.project.tjvclient.model.CourseDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.StudentDto;
+import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -38,19 +39,23 @@ public class CourseService {
         courseClient.setCurrentCourse(courseId);
     }
 
+    public int getCurrentCourse() {
+        return this.currentCourseId;
+    }
+
     public boolean isCurrentCourseSet() {
         return currentCourseId != null;
     }
 
     //CRUD: Update
-    public void updateCurrentCourse(String name, int credits, int capacity, String teacherName, List<String> studentNames) {
+    public void updateCurrentCourse(String name, int credits, int capacity, TeacherDto teacher, Collection<StudentDto> students) {
         var u = new CourseDto();
         u.setId(currentCourseId);
         u.setName(name);
         u.setCredits(credits);
         u.setCapacity(capacity);
-        u.setTeacherName(teacherName);
-        u.setStudentNames(studentNames);
+        u.setTeacher(teacher);
+        u.setStudents(students);
         courseClient.updateCurrentCourse(u);
     }
 
@@ -59,11 +64,11 @@ public class CourseService {
         courseClient.delete(currentCourseId);
     }
 
-    public List<CourseDto> readByStudentsId(int studentId) {
+    public Collection<CourseDto> readByStudentsId(int studentId) {
         return courseClient.readByStudentsId(studentId);
     }
 
-    public List<CourseDto> readByCredits(int credits) {
+    public Collection<CourseDto> readByCredits(int credits) {
         return courseClient.readByCredits(credits);
     }
 }

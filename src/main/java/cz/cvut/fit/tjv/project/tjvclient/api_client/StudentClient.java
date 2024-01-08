@@ -74,7 +74,7 @@ public class StudentClient {
                 .toBodilessEntity();
     }
 
-    public List<StudentDto> readByCoursesId(int courseId) {
+    public Collection<StudentDto> readByCoursesId(int courseId) {
         return Arrays.asList(studentRestClient.get()
                 .uri("/" + courseId + "/getStudentsByCourseId")
                 .retrieve()

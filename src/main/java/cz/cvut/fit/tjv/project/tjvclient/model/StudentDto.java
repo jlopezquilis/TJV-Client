@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.project.tjvclient.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,16 +8,16 @@ public class StudentDto {
     private int id;
     private String name;
     private int age;
-    private List<String> courseNames;
+    private Collection<CourseDto> courses;
 
     public StudentDto() {
     }
 
-    public StudentDto(int id, String name, int age, List<String> courseNames) {
+    public StudentDto(int id, String name, int age, Collection<CourseDto> courses) {
         this.id = id;
         this.name = name;
         this.age = age;
-        this.courseNames = courseNames;
+        this.courses = courses;
     }
 
     // Getters and Setters
@@ -44,14 +45,6 @@ public class StudentDto {
         this.age = age;
     }
 
-    public List<String> getCourseNames() {
-        return courseNames;
-    }
-
-    public void setCourseNames(List<String> courseNames) {
-        this.courseNames = courseNames;
-    }
-
     // equals, hashCode, toString
     @Override
     public boolean equals(Object o) {
@@ -61,21 +54,33 @@ public class StudentDto {
         return id == studentDto.id &&
                 age == studentDto.age &&
                 Objects.equals(name, studentDto.name) &&
-                Objects.equals(courseNames, studentDto.courseNames);
+                Objects.equals(courses, studentDto.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, courseNames);
+        return Objects.hash(id, name, age, courses);
     }
 
     @Override
     public String toString() {
-        return "StudentDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", courseNames=" + courseNames +
-                '}';
+        String lineSeparator = System.getProperty("line.separator");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Student Details").append(lineSeparator);
+        sb.append(String.format("%-15s: %s", "ID", id)).append(lineSeparator);
+        sb.append(String.format("%-15s: %s", "Name", name)).append(lineSeparator);
+        sb.append(String.format("%-15s: %d", "Age", age)).append(lineSeparator);
+
+        return sb.toString();
+    }
+
+
+    public Collection<CourseDto> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Collection<CourseDto> courses) {
+        this.courses = courses;
     }
 }

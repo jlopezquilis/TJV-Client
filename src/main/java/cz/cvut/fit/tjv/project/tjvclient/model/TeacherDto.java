@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.project.tjvclient.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -7,16 +8,16 @@ public class TeacherDto {
     private int id;
     private String name;
     private String department;
-    private List<String> courseNames; // Assuming you only want to display the names of the courses
+    private Collection<CourseDto> courses; // Assuming you only want to display the names of the courses
 
     public TeacherDto() {
     }
 
-    public TeacherDto(int id, String name, String department, List<String> courseNames) {
+    public TeacherDto(int id, String name, String department, Collection<CourseDto> courses) {
         this.id = id;
         this.name = name;
         this.department = department;
-        this.courseNames = courseNames;
+        this.courses = courses;
     }
 
     // Getters and Setters
@@ -44,14 +45,6 @@ public class TeacherDto {
         this.department = department;
     }
 
-    public List<String> getCourseNames() {
-        return courseNames;
-    }
-
-    public void setCourseNames(List<String> courseNames) {
-        this.courseNames = courseNames;
-    }
-
     // equals, hashCode, toString
     @Override
     public boolean equals(Object o) {
@@ -61,21 +54,32 @@ public class TeacherDto {
         return id == teacherDto.id &&
                 Objects.equals(name, teacherDto.name) &&
                 Objects.equals(department, teacherDto.department) &&
-                Objects.equals(courseNames, teacherDto.courseNames);
+                Objects.equals(courses, teacherDto.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, department, courseNames);
+        return Objects.hash(id, name, department, courses);
     }
 
     @Override
     public String toString() {
-        return "TeacherDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", department='" + department + '\'' +
-                ", courseNames=" + courseNames +
-                '}';
+        String lineSeparator = System.getProperty("line.separator");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Teacher Details").append(lineSeparator);
+        sb.append(String.format("%-15s: %s", "ID", id)).append(lineSeparator);
+        sb.append(String.format("%-15s: %s", "Name", name)).append(lineSeparator);
+        sb.append(String.format("%-15s: %s", "Department", department)).append(lineSeparator);
+
+        return sb.toString();
+    }
+
+    public Collection<CourseDto> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Collection<CourseDto> courses) {
+        this.courses = courses;
     }
 }
