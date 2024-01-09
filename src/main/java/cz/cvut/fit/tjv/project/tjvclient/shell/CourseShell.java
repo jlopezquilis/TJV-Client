@@ -45,9 +45,8 @@ public class CourseShell {
 
     //CREATE method
     @ShellMethod("Create a new course.")
-    public String createNewCourse(int id, String name, int credits, int capacity, int teacherId) {
+    public String createNewCourse(String name, int credits, int capacity, int teacherId) {
         var course = new CourseDto();
-        course.setId(id);
         course.setName(name);
         course.setCredits(credits);
         course.setCapacity(capacity);
