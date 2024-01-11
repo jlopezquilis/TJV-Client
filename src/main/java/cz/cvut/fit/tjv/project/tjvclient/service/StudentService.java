@@ -19,11 +19,9 @@ public class StudentService {
         this.studentClient = studentClient;
     }
 
-    /*
     public Collection<StudentDto> readAll() {
         return studentClient.readAll();
     }
-     */
 
     //CRUD: Read by id
     public StudentDto read(int studentId) {
@@ -39,6 +37,10 @@ public class StudentService {
     public void setCurrentStudent(int studentId) {
         this.currentStudentId = studentId;
         studentClient.setCurrentStudent(studentId);
+    }
+
+    public int getCurrentStudent() {
+        return this.currentStudentId;
     }
 
     public boolean isCurrentStudentSet() {

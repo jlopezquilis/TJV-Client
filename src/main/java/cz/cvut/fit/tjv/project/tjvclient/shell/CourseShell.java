@@ -36,19 +36,25 @@ public class CourseShell {
         return courseService.readAll();
     }
 
-    @ShellMethod("Read a specific course by ID.")
-    public CourseDto readCourse(int courseId) {
+    @ShellMethod("Read a specific course by ID. After the read, this course will become the selected one.")
+    public CourseDto readCourse(@ShellOption int courseId) {
         return courseService.read(courseId);
     }
 
-    @ShellMethod("Read a specific course by ID.")
+    @ShellMethod("Set the selected course by its ID.")
+    public void setCurrentCourse(@ShellOption int courseId) {
+        courseService.setCurrentCourse(courseId);
+    }
+
+
+    @ShellMethod("Read the selected course.")
     public CourseDto readCurrentCourse() {
         return courseService.read(courseService.getCurrentCourse());
     }
 
     //CREATE method
     @ShellMethod("Create a new course.")
-    public String createNewCourse(String name, int credits, int capacity) {
+    public String createNewCourse(@ShellOption String name, @ShellOption int credits, @ShellOption int capacity) {
         var course = new CourseDto();
         course.setName(name);
         course.setCredits(credits);
@@ -64,8 +70,8 @@ public class CourseShell {
     }
 
     //UPDATE methods
-    @ShellMethod("Update the current course.")
-    public String updateCurrentCourse(String name, int credits, int capacity, TeacherDto teacher, Collection<StudentDto> students) {
+    @ShellMethod("Update the selected course.")
+    public String updateCurrentCourse(@ShellOption String name, @ShellOption int credits, @ShellOption int capacity, @ShellOption TeacherDto teacher, @ShellOption Collection<StudentDto> students) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
@@ -77,8 +83,8 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Update the current course.")
-    public String updateCurrentCourseName(String name) {
+    @ShellMethod("Update the selected course name.")
+    public String updateCurrentCourseName(@ShellOption String name) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
@@ -91,8 +97,8 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Update the current course.")
-    public String updateCurrentCourseCredits(int credits) {
+    @ShellMethod("Update the selected course credits.")
+    public String updateCurrentCourseCredits(@ShellOption int credits) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
@@ -105,8 +111,8 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Update the current course.")
-    public String updateCurrentCourseCapacity(int capacity) {
+    @ShellMethod("Update the selected course capacity.")
+    public String updateCurrentCourseCapacity(@ShellOption int capacity) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
@@ -119,8 +125,8 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Update the current course.")
-    public String updateCurrentCourseTeacher(int teacherId) {
+    @ShellMethod("Update the selected course teacher by its teacherId.")
+    public String updateCurrentCourseTeacher(@ShellOption int teacherId) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
@@ -134,8 +140,8 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Update the current course.")
-    public String addStudentToCurrentCourse(int studentId) {
+    @ShellMethod("Add a student to the selected course.")
+    public String addStudentToCurrentCourse(@ShellOption int studentId) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
@@ -151,7 +157,7 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Delete the current course.")
+    @ShellMethod("Delete the selected course.")
     public String deleteCurrentCourse() {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
@@ -164,12 +170,7 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Set the current course by ID.")
-    public void setCurrentCourse(int courseId) {
-        courseService.setCurrentCourse(courseId);
-    }
-
-    @ShellMethod("Ask for the current course.")
+    @ShellMethod("Ask for the selected course.")
     public String askCurrentCourse() {
         try {
             return "Current Course ID: " + courseService.getCurrentCourse();
@@ -183,12 +184,12 @@ public class CourseShell {
     // Additional methods for readByStudentsId and readByCredits
     //toString() method is called by Spring Shell, no need of explicitly calling it.
     @ShellMethod("Read courses enrolled for a given studentId")
-    public Collection<CourseDto> readCoursesByStudentsId(int studentId) {
+    public Collection<CourseDto> readCoursesByStudentsId(@ShellOption int studentId) {
         return courseService.readByStudentsId(studentId);
     }
 
     @ShellMethod("Read courses with a concrete number of credits")
-    public Collection<CourseDto> readCoursesByCredits(int credits) {
+    public Collection<CourseDto> readCoursesByCredits(@ShellOption int credits) {
         return courseService.readByCredits(credits);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @ShellComponent
@@ -24,19 +25,41 @@ public class TeacherShell {
         this.teacherService = teacherService;
     }
 
-    @ShellMethod("Read a teacher by ID.")
-    public String readTeacher(@ShellOption Integer teacherId) {
-        TeacherDto teacher = teacherService.read(teacherId);
-        return teacher != null ? teacher.toString() : "Teacher with ID " + teacherId + " not found.";
+
+    @ShellMethod("List all teachers")
+    public Collection<TeacherDto> listAllTeachers() {
+        return teacherService.readAll();
+    }
+    @ShellMethod("Read a specific teacher by ID. After the read, this teacher will become the selected one.")
+    public TeacherDto readTeacher(@ShellOption Integer teacherId) {
+        return teacherService.read(teacherId);
+    }
+
+    @ShellMethod("Set the selected teacher by its ID.")
+    public void setCurrentCourse(@ShellOption int teacherId) {
+        teacherService.setCurrentTeacher(teacherId);
+    }
+
+    @ShellMethod("Read the selected teacher.")
+    public TeacherDto readCurrentTeacher() {
+        return teacherService.read(teacherService.getCurrentTeacher());
     }
 
     @ShellMethod("Create a new teacher.")
-    public void createTeacher(@ShellOption TeacherDto teacherDto) {
-        teacherService.create(teacherDto);
-        System.out.println("Created teacher: " + teacherDto.toString());
+    public String createNewTeacher(@ShellOption String name, @ShellOption String department) {
+        var teacher = new TeacherDto();
+        teacher.setName(name);
+        teacher.setDepartment(department);
+        teacher.setCourses(Collections.emptyList());
+        try {
+            teacherService.create(teacher);
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+        return "Teacher created successfully";
     }
 
-    @ShellMethod("Update the current teacher's information.")
+    @ShellMethod("Update the selected teacher.")
     public void updateCurrentTeacher(@ShellOption String name,
                                      @ShellOption String department,
                                      @ShellOption Collection<CourseDto> courses) {
@@ -44,10 +67,45 @@ public class TeacherShell {
         System.out.println("Updated teacher.");
     }
 
+    @ShellMethod("Update the selected teacher name.")
+    public String updateCurrentTeacherName(@ShellOption String name) {
+        if (!teacherService.isCurrentTeacherSet()) {
+            return "No current teacher set. Please set teacher first.";
+        }
+        try {
+            TeacherDto current = readCurrentTeacher();
+            teacherService.updateCurrentTeacher(name, current.getDepartment(), current.getCourses());
+            return "Teacher name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @ShellMethod("Update the selected teacher department.")
+    public String updateCurrentTeacherDepartment(@ShellOption String department) {
+        if (!teacherService.isCurrentTeacherSet()) {
+            return "No current teacher set. Please set teacher first.";
+        }
+        try {
+            TeacherDto current = readCurrentTeacher();
+            teacherService.updateCurrentTeacher(current.getName(), department, current.getCourses());
+            return "Course name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
     @ShellMethod("Delete the current teacher.")
-    public void deleteCurrentTeacher() {
-        teacherService.deleteCurrentTeacher();
-        System.out.println("Deleted teacher.");
+    public String deleteCurrentTeacher() {
+        if (!teacherService.isCurrentTeacherSet()) {
+            return "No current course set. Please set a current course first.";
+        }
+        try {
+            teacherService.deleteCurrentTeacher();
+            return "Teacher deleted successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
     }
 
     @ShellMethod("List teachers by department ID.")

@@ -13,6 +13,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @ShellComponent
@@ -24,19 +25,43 @@ public class StudentShell {
         this.studentService = studentService;
     }
 
-    @ShellMethod("Read a student by ID.")
+    @ShellMethod("List all students.")
+    public Collection<StudentDto> listAllStudents() {
+        return studentService.readAll();
+    }
+
+    @ShellMethod("Read a specific student by ID. After the read, this student will become the selected one.")
     public String readStudent(@ShellOption int studentId) {
         StudentDto student = studentService.read(studentId);
         return student != null ? student.toString() : "Student with ID " + studentId + " not found.";
     }
 
-    @ShellMethod("Create a new student.")
-    public void createStudent(@ShellOption StudentDto studentDto) {
-        studentService.create(studentDto);
-        System.out.println("Created student: " + studentDto.toString());
+    @ShellMethod("Set the selected student by its ID.")
+    public void setCurrentCourse(@ShellOption int studentId) {
+        studentService.setCurrentStudent(studentId);
     }
 
-    @ShellMethod("Update the current student.")
+    @ShellMethod("Read the selected teacher.")
+    public StudentDto readCurrentStudent() {
+        return studentService.read(studentService.getCurrentStudent());
+    }
+
+
+    @ShellMethod("Create a new student.")
+    public String createNewStudent(@ShellOption String name, @ShellOption int age) {
+        var student = new StudentDto();
+        student.setName(name);
+        student.setAge(age);
+        student.setCourses(Collections.emptyList());
+        try {
+            studentService.create(student);
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+        return "Teacher created successfully";
+    }
+
+    @ShellMethod("Update the selected student.")
     public void updateCurrentStudent(@ShellOption String name,
                                      @ShellOption Integer age,
                                      @ShellOption Collection<CourseDto> courses) {
@@ -44,10 +69,45 @@ public class StudentShell {
         System.out.println("Updated student.");
     }
 
+    @ShellMethod("Update the selected student name.")
+    public String updateCurrentTeacherName(@ShellOption String name) {
+        if (!studentService.isCurrentStudentSet()) {
+            return "No current student set. Please set student first.";
+        }
+        try {
+            StudentDto current = readCurrentStudent();
+            studentService.updateCurrentStudent(name, current.getAge(), current.getCourses());
+            return "Student name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @ShellMethod("Update the selected student age.")
+    public String updateCurrentTeacherAge(@ShellOption int age) {
+        if (!studentService.isCurrentStudentSet()) {
+            return "No current student set. Please set student first.";
+        }
+        try {
+            StudentDto current = readCurrentStudent();
+            studentService.updateCurrentStudent(current.getName(), age, current.getCourses());
+            return "Student age updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
     @ShellMethod("Delete the current student.")
-    public void deleteCurrentStudent() {
-        studentService.deleteCurrentStudent();
-        System.out.println("Deleted current student.");
+    public String deleteCurrentTeacher() {
+        if (!studentService.isCurrentStudentSet()) {
+            return "No current course set. Please set a current course first.";
+        }
+        try {
+            studentService.deleteCurrentStudent();
+            return "Student deleted successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
     }
 
     @ShellMethod("List students by course ID.")

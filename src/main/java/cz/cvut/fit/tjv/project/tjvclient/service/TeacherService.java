@@ -19,11 +19,9 @@ public class TeacherService {
     }
 
     //CRUD: Read all teachers
-    /*
     public Collection<TeacherDto> readAll() {
         return teacherClient.readAll();
     }
-     */
 
     //CRUD: Read by id
     public TeacherDto read(Integer teacherId) {
@@ -39,6 +37,10 @@ public class TeacherService {
     public void setCurrentTeacher(int teacherId) {
         this.currentTeacherId = teacherId;
         teacherClient.setCurrentTeacher(teacherId);
+    }
+
+    public int getCurrentTeacher() {
+        return  this.currentTeacherId;
     }
 
     public boolean isCurrentTeacherSet() {

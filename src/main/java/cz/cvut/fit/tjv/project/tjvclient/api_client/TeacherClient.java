@@ -40,14 +40,12 @@ public class TeacherClient {
     }
 
     //CRUD: Read all teachers
-    /*
     public Collection<TeacherDto> readAll() {
         return Arrays.asList(teacherRestClient.get()
                 .retrieve()
                 .toEntity(TeacherDto[].class)
                 .getBody());
     }
-     */
 
     //CRUD: Read by id
     public TeacherDto read(Integer teacherId) {
