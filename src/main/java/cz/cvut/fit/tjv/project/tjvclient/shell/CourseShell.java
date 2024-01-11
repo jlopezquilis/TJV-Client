@@ -197,4 +197,9 @@ public class CourseShell {
     public Collection<CourseDto> readCoursesByCredits(@ShellOption int credits) {
         return courseService.readByCredits(credits);
     }
+
+    @ShellMethod("Read course for a given name")
+    public Collection<CourseDto> readCourseByName(@ShellOption String name) {
+        return courseService.readByName(name);
+    }
 }

@@ -71,4 +71,6 @@ public class CourseService {
     public Collection<CourseDto> readByCredits(int credits) {
         return courseClient.readByCredits(credits);
     }
+
+    public Collection<CourseDto> readByName(String name) {return courseClient.readByName(name);}
 }

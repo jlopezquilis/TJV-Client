@@ -85,4 +85,12 @@ public class CourseClient {
                 .toEntity(CourseDto[].class)
                 .getBody());
     }
+
+    public Collection<CourseDto> readByName(String name) {
+        return Arrays.asList(courseRestClient.get()
+                .uri("/idByName/" + name)
+                .retrieve()
+                .toEntity(CourseDto[].class)
+                .getBody());
+    }
 }
