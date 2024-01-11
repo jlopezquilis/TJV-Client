@@ -105,7 +105,7 @@ public class CourseShell {
         try {
             CourseDto current = readCurrentCourse();
             courseService.updateCurrentCourse(current.getName(), credits, current.getCapacity(), current.getTeacher(), current.getStudents());
-            return "Course name updated successfully";
+            return "Course credits updated successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -119,7 +119,7 @@ public class CourseShell {
         try {
             CourseDto current = readCurrentCourse();
             courseService.updateCurrentCourse(current.getName(), current.getCredits(), capacity, current.getTeacher(), current.getStudents());
-            return "Course name updated successfully";
+            return "Course capacity updated successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -134,7 +134,7 @@ public class CourseShell {
             CourseDto current = readCurrentCourse();
             TeacherDto teacher = teacherService.read(teacherId);
             courseService.updateCurrentCourse(current.getName(), current.getCredits(), current.getCapacity(), teacher, current.getStudents());
-            return "Course name updated successfully";
+            return "Course teacher updated successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -149,9 +149,14 @@ public class CourseShell {
             CourseDto current = readCurrentCourse();
             StudentDto student = studentService.read(studentId);
             Collection<StudentDto> studentList = current.getStudents();
+
+            if (studentList.size() >= current.getCapacity()) {
+                return "Course is full.";
+            }
+
             studentList.add(student);
             courseService.updateCurrentCourse(current.getName(), current.getCredits(), current.getCapacity(), current.getTeacher(), studentList);
-            return "Course name updated successfully";
+            return "Course student list updated successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
