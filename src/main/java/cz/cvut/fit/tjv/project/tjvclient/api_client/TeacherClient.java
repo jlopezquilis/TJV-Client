@@ -96,4 +96,12 @@ public class TeacherClient {
                 .toEntity(TeacherDto[].class)
                 .getBody());
     }
+
+    public Collection<CourseDto> readCoursesByTeacherId(int teacherId) {
+        return Arrays.asList(teacherRestClient.get()
+                .uri("/getCourses/" + teacherId)
+                .retrieve()
+                .toEntity(CourseDto[].class)
+                .getBody());
+    }
 }

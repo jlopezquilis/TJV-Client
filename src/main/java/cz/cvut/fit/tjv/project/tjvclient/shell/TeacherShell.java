@@ -45,6 +45,11 @@ public class TeacherShell {
         return teacherService.read(teacherService.getCurrentTeacher());
     }
 
+    @ShellMethod("Read the selected course.")
+    public Collection<CourseDto> getCoursesTaught(@ShellOption int teacherId) {
+        return teacherService.readCoursesByTeacherId(teacherId);
+    }
+
     @ShellMethod("Create a new teacher.")
     public String createNewTeacher(@ShellOption String name, @ShellOption String department) {
         var teacher = new TeacherDto();

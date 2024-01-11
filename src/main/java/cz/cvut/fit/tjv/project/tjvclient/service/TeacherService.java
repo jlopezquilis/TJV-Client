@@ -72,4 +72,6 @@ public class TeacherService {
 
     public Collection<TeacherDto> readByName(String name) {return teacherClient.readByName(name);}
 
+    public Collection<CourseDto> readCoursesByTeacherId(int teacherId) {return teacherClient.readCoursesByTeacherId(teacherId);}
+
 }
