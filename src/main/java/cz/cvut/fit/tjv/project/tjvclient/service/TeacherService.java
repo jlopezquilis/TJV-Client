@@ -70,4 +70,6 @@ public class TeacherService {
         return teacherClient.obtainStudentsTaughtByTeacher(teacherId);
     }
 
+    public Collection<TeacherDto> readByName(String name) {return teacherClient.readByName(name);}
+
 }

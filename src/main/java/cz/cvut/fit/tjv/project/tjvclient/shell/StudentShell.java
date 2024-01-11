@@ -124,5 +124,8 @@ public class StudentShell {
         return "Total enrolled credits for student with ID " + studentId + ": " + totalCredits;
     }
 
-    // Additional shell methods can be added here as needed.
+    @ShellMethod("Read Student for a given name")
+    public Collection<StudentDto> readStudentByName(@ShellOption String name) {
+        return studentService.readByName(name);
+    }
 }

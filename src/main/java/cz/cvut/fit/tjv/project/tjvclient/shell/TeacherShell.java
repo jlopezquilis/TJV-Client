@@ -124,6 +124,9 @@ public class TeacherShell {
                 .reduce("", (partialString, student) -> partialString + student + System.getProperty("line.separator"));
     }
 
-    // Additional shell methods can be added here as needed.
+    @ShellMethod("Read teacher for a given name")
+    public Collection<TeacherDto> readTeacherByName(@ShellOption String name) {
+        return teacherService.readByName(name);
+    }
 
 }

@@ -1,5 +1,6 @@
 package cz.cvut.fit.tjv.project.tjvclient.api_client;
 
+import cz.cvut.fit.tjv.project.tjvclient.model.CourseDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.StudentDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,6 +87,14 @@ public class StudentClient {
                 .retrieve()
                 .toEntity(Integer.class)
                 .getBody();
+    }
+
+    public Collection<StudentDto> readByName(String name) {
+        return Arrays.asList(studentRestClient.get()
+                .uri("/idByName/" + name)
+                .retrieve()
+                .toEntity(StudentDto[].class)
+                .getBody());
     }
 }
 

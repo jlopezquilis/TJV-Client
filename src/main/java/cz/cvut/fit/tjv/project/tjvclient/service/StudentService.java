@@ -69,4 +69,6 @@ public class StudentService {
     public Integer obtainTotalEnrolledCredits(int studentId) {
         return studentClient.obtainTotalEnrolledCredits(studentId);
     }
+
+    public Collection<StudentDto> readByName(String name) {return studentClient.readByName(name);}
 }
