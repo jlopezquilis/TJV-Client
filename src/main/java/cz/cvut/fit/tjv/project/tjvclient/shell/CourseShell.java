@@ -140,21 +140,25 @@ public class CourseShell {
         }
     }
 
-    @ShellMethod("Add a student to the selected course.")
-    public String addStudentToCurrentCourse(@ShellOption int studentId) {
+    @ShellMethod("Add students to the selected course.")
+    public String addStudentToCurrentCourse(@ShellOption(arity = -1) int[] studentIds) {
         if (!courseService.isCurrentCourseSet()) {
             return "No current course set. Please set a current course first.";
         }
         try {
             CourseDto current = readCurrentCourse();
-            StudentDto student = studentService.read(studentId);
             Collection<StudentDto> studentList = current.getStudents();
 
-            if (studentList.size() >= current.getCapacity()) {
-                return "Course is full.";
+            for (int studentId : studentIds) {
+                if (studentList.size() >= current.getCapacity()) {
+                    return "Course reached its full capacity. Some students were not added.";
+                }
+                StudentDto student = studentService.read(studentId);
+                if (!studentList.contains(student)) {
+                    studentList.add(student);
+                }
             }
 
-            studentList.add(student);
             courseService.updateCurrentCourse(current.getName(), current.getCredits(), current.getCapacity(), current.getTeacher(), studentList);
             return "Course student list updated successfully";
         } catch (Exception e) {
