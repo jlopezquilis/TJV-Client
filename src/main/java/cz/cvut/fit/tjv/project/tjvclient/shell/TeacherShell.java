@@ -36,7 +36,7 @@ public class TeacherShell {
     }
 
     @ShellMethod("Set the selected teacher by its ID.")
-    public void setCurrentCourse(@ShellOption int teacherId) {
+    public void setCurrentTeacher(@ShellOption int teacherId) {
         teacherService.setCurrentTeacher(teacherId);
     }
 
@@ -89,7 +89,7 @@ public class TeacherShell {
         try {
             TeacherDto current = readCurrentTeacher();
             teacherService.updateCurrentTeacher(current.getName(), department, current.getCourses());
-            return "Course name updated successfully";
+            return "Teacher department updated successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
@@ -98,7 +98,7 @@ public class TeacherShell {
     @ShellMethod("Delete the current teacher.")
     public String deleteCurrentTeacher() {
         if (!teacherService.isCurrentTeacherSet()) {
-            return "No current course set. Please set a current course first.";
+            return "No current teacher set. Please set a current teacher first.";
         }
         try {
             teacherService.deleteCurrentTeacher();

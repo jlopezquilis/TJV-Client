@@ -37,11 +37,11 @@ public class StudentShell {
     }
 
     @ShellMethod("Set the selected student by its ID.")
-    public void setCurrentCourse(@ShellOption int studentId) {
+    public void setCurrentStudent(@ShellOption int studentId) {
         studentService.setCurrentStudent(studentId);
     }
 
-    @ShellMethod("Read the selected teacher.")
+    @ShellMethod("Read the selected student.")
     public StudentDto readCurrentStudent() {
         return studentService.read(studentService.getCurrentStudent());
     }
@@ -58,7 +58,7 @@ public class StudentShell {
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
-        return "Teacher created successfully";
+        return "Student created successfully";
     }
 
     @ShellMethod("Update the selected student.")
@@ -70,7 +70,7 @@ public class StudentShell {
     }
 
     @ShellMethod("Update the selected student name.")
-    public String updateCurrentTeacherName(@ShellOption String name) {
+    public String updateCurrentStudentName(@ShellOption String name) {
         if (!studentService.isCurrentStudentSet()) {
             return "No current student set. Please set student first.";
         }
@@ -84,7 +84,7 @@ public class StudentShell {
     }
 
     @ShellMethod("Update the selected student age.")
-    public String updateCurrentTeacherAge(@ShellOption int age) {
+    public String updateCurrentStudentAge(@ShellOption int age) {
         if (!studentService.isCurrentStudentSet()) {
             return "No current student set. Please set student first.";
         }
@@ -98,9 +98,9 @@ public class StudentShell {
     }
 
     @ShellMethod("Delete the current student.")
-    public String deleteCurrentTeacher() {
+    public String deleteCurrentStudent() {
         if (!studentService.isCurrentStudentSet()) {
-            return "No current course set. Please set a current course first.";
+            return "No current student set. Please set a current student first.";
         }
         try {
             studentService.deleteCurrentStudent();
