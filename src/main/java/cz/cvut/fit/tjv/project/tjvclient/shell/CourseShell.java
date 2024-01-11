@@ -4,6 +4,7 @@ import cz.cvut.fit.tjv.project.tjvclient.model.CourseDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.StudentDto;
 import cz.cvut.fit.tjv.project.tjvclient.model.TeacherDto;
 import cz.cvut.fit.tjv.project.tjvclient.service.CourseService;
+import cz.cvut.fit.tjv.project.tjvclient.service.StudentService;
 import cz.cvut.fit.tjv.project.tjvclient.service.TeacherService;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
@@ -21,11 +22,13 @@ import java.util.List;
 @ShellComponent
 public class CourseShell {
     private CourseService courseService;
+    private StudentService studentService;
     private final TeacherService teacherService; // Inject TeacherService
 
-    public CourseShell(CourseService courseService, TeacherService teacherService) {
+    public CourseShell(CourseService courseService, TeacherService teacherService, StudentService studentService) {
         this.courseService = courseService;
         this.teacherService = teacherService;
+        this.studentService = studentService;
     }
     //READ methods
     @ShellMethod("List all courses.")
@@ -45,12 +48,12 @@ public class CourseShell {
 
     //CREATE method
     @ShellMethod("Create a new course.")
-    public String createNewCourse(String name, int credits, int capacity, int teacherId) {
+    public String createNewCourse(String name, int credits, int capacity) {
         var course = new CourseDto();
         course.setName(name);
         course.setCredits(credits);
         course.setCapacity(capacity);
-        course.setTeacher(teacherService.read(teacherId));
+        course.setTeacher(null);
         course.setStudents(Collections.emptyList());
         try {
             courseService.create(course);
@@ -81,7 +84,67 @@ public class CourseShell {
         }
         try {
             CourseDto current = readCurrentCourse();
-            courseService.updateCurrentCourse(current.getName(), current.getCredits(), current.getCapacity(), current.getTeacher(), current.getStudents());
+            courseService.updateCurrentCourse(name, current.getCredits(), current.getCapacity(), current.getTeacher(), current.getStudents());
+            return "Course name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @ShellMethod("Update the current course.")
+    public String updateCurrentCourseCredits(int credits) {
+        if (!courseService.isCurrentCourseSet()) {
+            return "No current course set. Please set a current course first.";
+        }
+        try {
+            CourseDto current = readCurrentCourse();
+            courseService.updateCurrentCourse(current.getName(), credits, current.getCapacity(), current.getTeacher(), current.getStudents());
+            return "Course name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @ShellMethod("Update the current course.")
+    public String updateCurrentCourseCapacity(int capacity) {
+        if (!courseService.isCurrentCourseSet()) {
+            return "No current course set. Please set a current course first.";
+        }
+        try {
+            CourseDto current = readCurrentCourse();
+            courseService.updateCurrentCourse(current.getName(), current.getCredits(), capacity, current.getTeacher(), current.getStudents());
+            return "Course name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @ShellMethod("Update the current course.")
+    public String updateCurrentCourseTeacher(int teacherId) {
+        if (!courseService.isCurrentCourseSet()) {
+            return "No current course set. Please set a current course first.";
+        }
+        try {
+            CourseDto current = readCurrentCourse();
+            TeacherDto teacher = teacherService.read(teacherId);
+            courseService.updateCurrentCourse(current.getName(), current.getCredits(), current.getCapacity(), teacher, current.getStudents());
+            return "Course name updated successfully";
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+    }
+
+    @ShellMethod("Update the current course.")
+    public String addStudentToCurrentCourse(int studentId) {
+        if (!courseService.isCurrentCourseSet()) {
+            return "No current course set. Please set a current course first.";
+        }
+        try {
+            CourseDto current = readCurrentCourse();
+            StudentDto student = studentService.read(studentId);
+            Collection<StudentDto> studentList = current.getStudents();
+            studentList.add(student);
+            courseService.updateCurrentCourse(current.getName(), current.getCredits(), current.getCapacity(), current.getTeacher(), studentList);
             return "Course name updated successfully";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
